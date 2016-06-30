@@ -1,9 +1,11 @@
 from sklearn import svm, cross_validation
 from sklearn.metrics import precision_recall_fscore_support, classification_report, confusion_matrix
 from sklearn.decomposition import PCA
+from sklearn.grid_search import GridSearchCV
 from sklearn.learning_curve import learning_curve
 import numpy as np
 import csv
+import matplotlib.pyplot as plt
 
 clf = svm.SVC()
 
@@ -42,6 +44,19 @@ y = np.array(yTraveladdition)
 
 # kernel linear better than rbf when there number of features is larger than number of observation
 
+cvv = cross_validation.ShuffleSplit(X.shape[0], n_iter=10, test_size=0.2, random_state=0)
+gammas = np.logspace(-6, -1, 10)
+classifier = GridSearchCV(estimator=clf, cv=cvv, param_grid=dict(gamma=gammas))
+classifier.fit(X, y)
+
+title = 'Learning Curves (SVM, linear kernel, $\gamma=%.6f$)' %classifier.best_estimator_.gamma
+estimator = clf
+learning_curve(estimator, title, X, y, cv=cvv)
+plt.show()
+
+"""
+
+
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2, random_state=0)
 pca = PCA(n_components=2) # adjust by ourself
 
@@ -59,7 +74,7 @@ print len(y_train)
 
 clf.set_params(kernel='linear').fit(X_train, y_train)
 prediction_result = list(clf.predict(X_test))
-
+"""
 """
 clf.set_params(kernel='linear').fit(X_t_train, y_train)
 prediction_result = list(clf.predict(X_t_test))
@@ -73,7 +88,8 @@ prediction_result = list(clf.predict(X_t_test))
 # print y
 
 # print 'score', clf.score(X_test, y_test)
-
+"""
 print confusion_matrix(y_test, prediction_result)
 print classification_report(y_test, prediction_result)
 
+"""
