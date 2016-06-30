@@ -11,8 +11,10 @@ clf = svm.SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
   tol=0.001, verbose=False)
 
 # load dataset
+"""
 iris = datasets.load_iris()
 X, y, z = iris.data, iris.target, iris.target_names[iris.target]
+"""
 
 
 Xdataset = []
@@ -51,7 +53,7 @@ X_test = rng.rand(5, 10)
 """
 
 X = Xdataset
-y = yHikingWithDogs
+y = yConstitutionalpatriot
 # kernel linear better than rbf when there number of features is larger than number of observation
 clf.set_params(kernel='linear').fit(X, y)
 prediction_result = list(clf.predict(X))
